@@ -3,6 +3,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -16,15 +17,16 @@ namespace MaximaSharp
         private static Process NewMaxima()
         {
             if (Process != null) Process.Dispose();
-            var startInfo = new ProcessStartInfo(@"C:\Users\fabricio.sonego\Documents\CalculusCalculator\bin\Debug\netcoreapp2.1\bin\Maxima-5.30.0\lib\maxima\5.30.0\binary-gcl\maxima.exe", @"-eval ""(cl-user::run)"" -f -- -very-quiet")
+            var startInfo = new ProcessStartInfo(Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\..\\..\\..\\lib\\Maxima-5.30.0\\lib\\maxima\\" +
+                "5.30.0\\binary-gcl\\maxima.exe")), @"-eval ""(cl-user::run)"" -f -- -very-quiet")
             {
-                WorkingDirectory = @"C:\Users\fabricio.sonego\Documents\CalculusCalculator\bin\Debug\netcoreapp2.1\bin\Maxima-5.30.0\bin\",
+                WorkingDirectory = Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\..\\..\\..\\lib\\Maxima-5.30.0\\bin\\")),
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
-            startInfo.EnvironmentVariables.Add("maxima_prefix", @"C:\Users\fabricio.sonego\Documents\CalculusCalculator\bin\Debug\netcoreapp2.1\bin\Maxima-5.30.0");
+            startInfo.EnvironmentVariables.Add("maxima_prefix", Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\..\\..\\..\\lib\\Maxima-5.30.0")));
             return Process.Start(startInfo);
         }
 

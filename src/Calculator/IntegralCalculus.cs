@@ -21,6 +21,8 @@ namespace CalculusCalculator
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
+            Config.FunctionDirectory = context.FunctionDirectory;
+
             string function = req.Query["f"];
 
             if (string.IsNullOrEmpty(function))
