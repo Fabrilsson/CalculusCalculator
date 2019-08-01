@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculusCalculator", "CalculusCalculator.csproj", "{BF40AEF1-5759-4408-92DD-720E0BC8B3CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculusCalculator", "src\Calculator\CalculusCalculator.csproj", "{CC26ECB7-3FA5-48B8-ABE3-FB99378B45D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaximaSharp", "..\MaximaSharp-master\MaximaSharp\MaximaSharp.csproj", "{BB92EA20-C7F1-4330-9E1A-2C06EC24E587}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaximaSharp", "src\MaximaSharp\MaximaSharp.csproj", "{BB92EA20-C7F1-4330-9E1A-2C06EC24E587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "..\MaximaSharp-master\Test\Test.csproj", "{82C0D399-B2AF-462F-B69B-AD78ECA9B5E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\Test\Test.csproj", "{82C0D399-B2AF-462F-B69B-AD78ECA9B5E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BF40AEF1-5759-4408-92DD-720E0BC8B3CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF40AEF1-5759-4408-92DD-720E0BC8B3CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF40AEF1-5759-4408-92DD-720E0BC8B3CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF40AEF1-5759-4408-92DD-720E0BC8B3CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC26ECB7-3FA5-48B8-ABE3-FB99378B45D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC26ECB7-3FA5-48B8-ABE3-FB99378B45D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC26ECB7-3FA5-48B8-ABE3-FB99378B45D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC26ECB7-3FA5-48B8-ABE3-FB99378B45D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB92EA20-C7F1-4330-9E1A-2C06EC24E587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB92EA20-C7F1-4330-9E1A-2C06EC24E587}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB92EA20-C7F1-4330-9E1A-2C06EC24E587}.Release|Any CPU.ActiveCfg = Release|Any CPU
