@@ -1,72 +1,20 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.CodeDom.Compiler;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MaximaSharp
 {
     public static class Maxima
     {
-        public static List<string> Functions = new List<string> { "pow(x, y) := x^y" };
-        private static Process Process = NewMaxima();
+        private static List<string> _functions = new List<string> { "pow(x, y) := x^y" };
 
-        private static Process NewMaxima()
-        {
-            if (Process != null) Process.Dispose();
-            var startInfo = new ProcessStartInfo(Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\..\\..\\..\\lib\\Maxima-5.30.0\\lib\\maxima\\" +
-                "5.30.0\\binary-gcl\\maxima.exe")), @"-eval ""(cl-user::run)"" -f -- -very-quiet")
-            {
-                WorkingDirectory = Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\..\\..\\..\\lib\\Maxima-5.30.0\\bin\\")),
-                UseShellExecute = false,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-            startInfo.EnvironmentVariables.Add("maxima_prefix", Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\..\\..\\..\\lib\\Maxima-5.30.0")));
-            return Process.Start(startInfo);
-        }
-
-        public static string Eval(string expr)
-        {
-
-            Process.StandardInput.WriteLine(string.Format("{0}$ grind({1});", string.Join("$", Functions), expr.ToLower()));
-            var result = Process.StandardOutput.ReadLine();
-            while (!result.EndsWith("$"))
-                result += Process.StandardOutput.ReadLine();
-            Process.StandardOutput.ReadLine();
-            if (result.EndsWith("$")) return result.TrimEnd('$');
-            Process = NewMaxima();
-            throw new Exception(string.Format("Unexpected result: {0}", result));
-        }
-
-        public static LambdaExpression ToExpression(string types, string parameters, string code) //System.CodeDom Fails
-        {
-            try
-            {
-                return VBCodeProvider.CreateProvider("VB", new Dictionary<string, string>() { { "CompilerVersion", "v4.0" } })
-                    .CompileAssemblyFromSource(new CompilerParameters(new[] { "System.Core.dll" }), string.Format(
-               @"   Imports System
-                    Imports System.Linq.Expressions
-                    Public Class Program 
-                        Public Shared Lambda As Expression(Of Func(Of {0})) = Function({1}) {2}
-                    End Class
-                ", types, parameters, code.Replace("log", "Math.Log").Replace("sin", "Math.Sin").Replace("cos", "Math.Cos")))
-                    .CompiledAssembly.GetType("Program").GetField("Lambda").GetValue(null) as LambdaExpression;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(string.Format("Failed to convert to expression: {0}", code), ex);
-            }
-        }
-
-        private static string EvalToExpression(string format, params object[] args)
-        {
-            return Eval(string.Format(format, args));
-        }
+        private static StringBuilder _output { get; set; }
 
         public static string Simplify(this string expr)
         {
@@ -123,7 +71,53 @@ namespace MaximaSharp
             });
             gnuplot.StandardInput.WriteLine(s);
         }
-        
+
+        private static string EvalToExpression(string format, params object[] args)
+        {
+            return Eval(string.Format(format, args));
+        }
+
+        private static string Eval(string expr)
+        {
+            var process = NewMaxima();
+
+            _output = new StringBuilder();
+
+            process.StandardInput.WriteLine(string.Format("{0}$ grind({1});", string.Join("$", _functions), expr.ToLower()));
+            var result = process.StandardOutput.ReadLine();
+
+            while (!result.EndsWith("$"))
+                result += process.StandardOutput.ReadLine();
+
+            process.StandardOutput.ReadLine();
+
+            if (result.EndsWith("$")) return result.TrimEnd('$');
+
+            throw new Exception(string.Format("Unexpected result: {0}", result));
+        }
+
+        private static Process NewMaxima()
+        {
+            var process = new Process();
+
+            var startInfo = new ProcessStartInfo(Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\lib\\Maxima-5.30.0\\lib\\maxima\\" +
+                "5.30.0\\binary-gcl\\maxima.exe")), @"-eval ""(cl-user::run)"" -f -- -very-quiet")
+            {
+                WorkingDirectory = Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\lib\\Maxima-5.30.0\\bin\\")),
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+            startInfo.EnvironmentVariables.Add("maxima_prefix", Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\lib\\Maxima-5.30.0")));
+
+            process.StartInfo = startInfo;
+
+            process.Start();
+
+            return process;
+        }
+
         private class ParameterEqualityComparer : IEqualityComparer<ParameterExpression>
         {
             public bool Equals(ParameterExpression x, ParameterExpression y)

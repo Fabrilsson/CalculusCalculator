@@ -12,11 +12,11 @@ using System.Linq.Expressions;
 
 namespace CalculusCalculator
 {
-    public static class Function1
+    public static class IntegralCalculus
     {
         [FunctionName("IntegralCalculus")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log, ExecutionContext context)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -28,15 +28,14 @@ namespace CalculusCalculator
             if (string.IsNullOrEmpty(function))
                 return new BadRequestObjectResult("Please pass a function to be integrated");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            function = function ?? data?.function;
+            function = function ?? "";
 
             var result = function.Integrate();
 
-            return result != null
-                ? (ActionResult)new OkObjectResult(result)
-                : new BadRequestObjectResult("Erro on integration");
+            if (result != null)
+                return new OkObjectResult(result);
+            else
+                return new BadRequestObjectResult("Erro on integration");
         }
     }
 }
