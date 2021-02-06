@@ -100,16 +100,16 @@ namespace MaximaSharp
         {
             var process = new Process();
 
-            var startInfo = new ProcessStartInfo(Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\lib\\Maxima-5.30.0\\lib\\maxima\\" +
-                "5.30.0\\binary-gcl\\maxima.exe")), @"-eval ""(cl-user::run)"" -f -- -very-quiet")
+            var startInfo = new ProcessStartInfo(Path.GetFullPath(Path.Combine(Config.FunctionDirectory, @"..\..\..\..\lib\Maxima-5.30.0\lib\maxima\" +
+                @"5.30.0\binary-gcl\maxima.exe")), @"-eval ""(cl-user::run)"" -f -- -very-quiet")
             {
-                WorkingDirectory = Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\lib\\Maxima-5.30.0\\bin\\")),
+                WorkingDirectory = Path.GetFullPath(Path.Combine(Config.FunctionDirectory, @"..\..\..\..\lib\Maxima-5.30.0\bin\")),
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
-            startInfo.EnvironmentVariables.Add("maxima_prefix", Path.GetFullPath(Path.Combine(Config.FunctionDirectory, "..\\lib\\Maxima-5.30.0")));
+            startInfo.EnvironmentVariables.Add("maxima_prefix", Path.GetFullPath(Path.Combine(Config.FunctionDirectory, @"..\..\..\..\lib\Maxima-5.30.0")));
 
             process.StartInfo = startInfo;
 

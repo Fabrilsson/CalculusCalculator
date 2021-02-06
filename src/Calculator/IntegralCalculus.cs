@@ -30,12 +30,20 @@ namespace CalculusCalculator
 
             function = function ?? "";
 
-            var result = function.Integrate();
+            try
+            {
+                var result = function.Integrate();
 
-            if (result != null)
-                return new OkObjectResult(result);
-            else
-                return new BadRequestObjectResult("Erro on integration");
+                if (result != null)
+                    return new OkObjectResult(result);
+                else
+                    return new BadRequestObjectResult("Erro on integration");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }
