@@ -63,7 +63,7 @@ namespace MaximaSharp
 
         public static void GnuPlot(string s)
         {
-            var gnuplot = Process.Start(new ProcessStartInfo(@"C:\Users\fabricio.sonego\Documents\CalculusCalculator\bin\Maxima-5.30.0\gnuplot\gnuplot.exe")
+            var gnuplot = Process.Start(new ProcessStartInfo(Path.Combine(Config.FunctionDirectory, @"..\..\..\..\lib\Maxima-5.30.0\gnuplot\gnuplot.exe"))
             {
                 UseShellExecute = false,
                 RedirectStandardInput = true,
